@@ -1,4 +1,5 @@
 
+import timeit
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
@@ -90,20 +91,20 @@ def cifar10(training=True, batch_size=64, transforms=None):
 
 
 
-if __name__ == '__main__':
+def main():
     train_losses = []
     test_losses = []
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = model.Standard().to(device)
-    optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.5)
+    learning_model = model.Standard().to(device)
+    optimizer = optim.SGD(learning_model.parameters(), lr=0.1, momentum=0.5)
 
 
     seed = 42
 
     torch.manual_seed(seed)
 
-    batch_size = 256
-    test_batch_size = 256
+    batch_size = 128
+    test_batch_size = 128
     tensorNormalz = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.49139968, 0.48215841, 0.44653091), (0.24703223, 0.24348513, 0.26158784)),
@@ -118,12 +119,16 @@ if __name__ == '__main__':
                                                       test_loader.batch_size,
                                                       drop_last=False)
     params = {
-        'epochs': 50,
+        'epochs': 1,
         'train_losses': train_losses,
         'test_losses': test_losses,
-        'log_interval': 40,
+        'log_interval': 8,
         'train_sample_loader': train_sample_loader
     }
-    print('ok')
 
-    learn(model, optimizer, train_loader, test_loader, **params)
+    learn(learning_model, optimizer, train_loader, test_loader, **params)
+
+
+
+if __name__ == '__main__':
+    print(f'Total time: {timeit.timeit(main):.2f}\n')
