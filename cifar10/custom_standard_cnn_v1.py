@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class Standard(nn.Module):
+class Model(nn.Module):
     def __init__(self):
         super(Standard, self).__init__()
         self.conv1 = nn.Conv2d(3, 256, kernel_size=3) # change the input channels to 3 since cifar is colored
