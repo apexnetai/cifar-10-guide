@@ -131,4 +131,4 @@ def main():
 
 
 if __name__ == '__main__':
-    print(f'Total time: {timeit.timeit(main):.2f}\n')
+    print(f'Total time: {timeit.timeit(main, number=1):.2f}\n')
