@@ -1,1 +1,1 @@
-resnet18_transfer_learning.py
+resnet34_transfer_learning.py

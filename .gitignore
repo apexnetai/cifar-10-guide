@@ -1,6 +1,7 @@
 _local_data
 .idea
 *.iml
+nohup.out
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

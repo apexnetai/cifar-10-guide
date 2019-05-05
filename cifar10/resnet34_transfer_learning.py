@@ -8,9 +8,8 @@ class Model(nn.Module):
 
     def __init__(self):
         super(Model, self).__init__()
-        self.resnet = torchvision.models.resnet18(pretrained=True)
-        #self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=(5, 5), stride=(1, 1), padding=(3, 3), bias=False)
-        self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(3, 3), bias=False)
+        self.resnet = torchvision.models.resnet34(pretrained=True)
+        self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(0, 0), bias=False)
         self.resnet.fc = nn.Linear(512, 512)
         self.drop1 = nn.Dropout2d(0.5)
         self.fc1 = nn.Linear(512, 256)

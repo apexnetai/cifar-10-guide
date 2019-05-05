@@ -7,6 +7,7 @@ import numpy as np
 
 from torch.utils.data.dataset import Subset
 from torchvision import datasets, transforms
+from tqdm import tqdm
 
 import model
 
@@ -16,7 +17,8 @@ def train(model, device, train_loader, optimizer, epoch, train_losses=None, log_
         train_losses = []
 
     model.train()
-    for batch_idx, (data, target) in enumerate(train_loader):
+    data_with_progress = tqdm(enumerate(train_loader), total=len(train_loader)) 
+    for batch_idx, (data, target) in data_with_progress: 
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
@@ -25,9 +27,10 @@ def train(model, device, train_loader, optimizer, epoch, train_losses=None, log_
         loss.backward()
         optimizer.step()
         if batch_idx % log_interval == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+            desc = 'Train Epoch: {} [{}/{} ({:.0f}%)] Loss: {:.6f}'.format(
                     epoch, batch_idx * len(data), len(train_loader.dataset),
-                           100. * batch_idx / len(train_loader), loss.item()))
+                           100. * batch_idx / len(train_loader), loss.item())
+            data_with_progress.set_description(desc=desc) #f'Loss {loss.item()}')
 
 
 def test(model, device, test_loader, test_losses=[]):
@@ -119,7 +122,7 @@ def main():
                                                       test_loader.batch_size,
                                                       drop_last=False)
     params = {
-        'epochs': 1,
+        'epochs': 16,
         'train_losses': train_losses,
         'test_losses': test_losses,
         'log_interval': 8,
@@ -131,4 +134,10 @@ def main():
 
 
 if __name__ == '__main__':
-    print(f'Total time: {timeit.timeit(main, number=1):.2f}\n')
+    total_secs = timeit.timeit(main, number=1)
+    millis = total_secs - int(total_secs)
+    total_secs = int(total_secs)
+    mins = total_secs // 60
+    secs = total_secs % 60
+    print(f'Total time: {mins}m {secs+millis:.2f}s\n')
+
