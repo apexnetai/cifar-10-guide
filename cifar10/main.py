@@ -97,7 +97,7 @@ def main():
     train_losses = []
     test_losses = []
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    learning_model = models.get_model(name='custom-2') #model.Model().to(device)
+    learning_model = models.get_model(name='custom-2').to(device) #model.Model().to(device)
     optimizer = optim.SGD(learning_model.parameters(), lr=0.1, momentum=0.5)
 
 
