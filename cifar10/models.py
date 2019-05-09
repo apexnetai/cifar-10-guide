@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torchvision
 
 import modules
-import custom_models
+import custom
 
 
 def build_custom_v1():
@@ -73,5 +73,5 @@ def get_model(name='resnet18', pretrained=True):
         return build_custom_v1()
 
     elif name == 'custom-2':
-        return custom_models.CustomResnetV1()
+        return custom.CustomResnetV1()
 
