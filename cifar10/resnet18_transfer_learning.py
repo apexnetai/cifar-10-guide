@@ -9,8 +9,7 @@ class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
         self.resnet = torchvision.models.resnet18(pretrained=True)
-        #self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=(5, 5), stride=(1, 1), padding=(3, 3), bias=False)
-        self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(3, 3), bias=False)
+        self.resnet.conv1 = nn.Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(0, 0), bias=False)
         self.resnet.fc = nn.Linear(512, 512)
         self.drop1 = nn.Dropout2d(0.5)
         self.fc1 = nn.Linear(512, 256)
@@ -18,11 +17,9 @@ class Model(nn.Module):
         self.fc2 = nn.Linear(256, 10)
 
     def forward(self, x):
-        X = x
-        X = self.resnet(X)
-        X = F.relu(self.drop1(X))
-        X = F.relu(self.drop2(self.fc1(X)))
-        # X = torch.cat([X, meta], dim=1)
-        X = self.fc2(X)
+        x = self.resnet(x)
+        x = F.relu(self.drop1(x))
+        x = F.relu(self.drop2(self.fc1(x)))
+        x = self.fc2(x)
 
-        return F.log_softmax(X, dim=1)
+        return F.log_softmax(x, dim=1)

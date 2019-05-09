@@ -4,12 +4,13 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
+import argparse
 
 from torch.utils.data.dataset import Subset
 from torchvision import datasets, transforms
 from tqdm import tqdm
 
-import model
+import models
 
 
 def train(model, device, train_loader, optimizer, epoch, train_losses=None, log_interval=1):
@@ -27,10 +28,8 @@ def train(model, device, train_loader, optimizer, epoch, train_losses=None, log_
         loss.backward()
         optimizer.step()
         if batch_idx % log_interval == 0:
-            desc = 'Train Epoch: {} [{}/{} ({:.0f}%)] Loss: {:.6f}'.format(
-                    epoch, batch_idx * len(data), len(train_loader.dataset),
-                           100. * batch_idx / len(train_loader), loss.item())
-            data_with_progress.set_description(desc=desc) #f'Loss {loss.item()}')
+            desc = f'Train Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)}] Loss({loss.item():.6f})'
+            data_with_progress.set_description(desc=desc)
 
 
 def test(model, device, test_loader, test_losses=[]):
@@ -98,7 +97,7 @@ def main():
     train_losses = []
     test_losses = []
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    learning_model = model.Model().to(device)
+    learning_model = models.get_model(name='custom-2') #model.Model().to(device)
     optimizer = optim.SGD(learning_model.parameters(), lr=0.1, momentum=0.5)
 
 
